@@ -1,32 +1,44 @@
 # 世界杯信息服务器 Docker 镜像
-# 包含：Go服务器 + 前端静态文件
+# 多阶段构建：前端构建 → Go编译 → 最终镜像
 
-FROM golang:1.21-alpine AS builder
+# 阶段1：前端构建
+FROM node:20-alpine AS frontend-builder
 
-# 编译 Go 服务器
+WORKDIR /app
+
+# 复制前端依赖文件
+COPY package.json package-lock.json ./
+
+# 安装依赖
+RUN npm ci
+
+# 复制前端源码
+COPY src ./src
+COPY public ./public
+COPY tsconfig.json tsconfig.app.json vite.config.ts tailwind.config.js postcss.config.js ./
+
+# 构建前端
+RUN npm run build
+
+# 阶段2：Go服务器编译
+FROM golang:1.21-alpine AS go-builder
+
 WORKDIR /build
 COPY server.go .
 RUN go build -o server server.go
 
-# 最终镜像
+# 阶段3：最终镜像
 FROM alpine:3.19
 
-# 安装必要工具
 RUN apk add --no-cache ca-certificates tzdata
 
-# 设置时区为上海
 ENV TZ=Asia/Shanghai
 
 WORKDIR /app
 
-# 复制编译好的服务器
-COPY --from=builder /build/server .
+COPY --from=go-builder /build/server .
+COPY --from=frontend-builder /app/dist ./dist
 
-# 复制前端静态文件
-COPY dist ./dist
-
-# 暴露端口
 EXPOSE 8080
 
-# 启动服务器
 CMD ["./server"]
