@@ -15,7 +15,7 @@ RUN npm ci
 # 复制前端源码
 COPY src ./src
 COPY public ./public
-COPY tsconfig.json tsconfig.app.json vite.config.ts tailwind.config.js postcss.config.js ./
+COPY tsconfig.json vite.config.ts tailwind.config.js postcss.config.js index.html ./
 
 # 构建前端
 RUN npm run build
