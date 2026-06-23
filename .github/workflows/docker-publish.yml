@@ -28,7 +28,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: YOUR_DOCKERHUB_USERNAME/worldcup-app
+          images: zaizaiyang/wc_data
           tags: |
             type=ref,event=branch
             type=sha,prefix=,suffix=,format=short
