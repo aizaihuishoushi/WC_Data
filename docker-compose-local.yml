@@ -1,0 +1,12 @@
+# docker-compose-local.yml
+# 用于本地构建镜像（不推送到Docker Hub）
+
+services:
+  worldcup:
+    build: .
+    container_name: worldcup-server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai

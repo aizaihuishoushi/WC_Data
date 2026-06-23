@@ -1,0 +1,13 @@
+# docker-compose.yml
+# 用于NAS从Docker Hub拉取镜像部署
+
+services:
+  worldcup:
+    # 镜像名改成你的 Docker Hub 用户名
+    image: YOUR_DOCKERHUB_USERNAME/worldcup-app:latest
+    container_name: worldcup-server
+    ports:
+      - "8080:8080"
+    restart: unless-stopped
+    environment:
+      - TZ=Asia/Shanghai
