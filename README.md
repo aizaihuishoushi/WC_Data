@@ -26,7 +26,7 @@ npm install
 npm run dev
 ```
 
-访问 http://localhost:5173
+访问 http://localhost:3578
 
 ### 方式二：编译 Go 服务器运行
 
@@ -45,7 +45,7 @@ go build -o server server.go
 # Mac/Linux: ./server
 ```
 
-访问 http://localhost:8080
+访问 http://localhost:3578
 
 ### 方式三：Docker 部署
 
