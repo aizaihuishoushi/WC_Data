@@ -53,8 +53,8 @@ go build -o server server.go
 # 拉取镜像（替换为你的 Docker Hub 仓库）
 docker pull zaizaiyang/wc_data:latest
 
-# 运行容器
-docker run -d -p 8080:8080 --name worldcup-server -e TZ=Asia/Shanghai zaizaiyang/wc_data:latest
+# 运行容器（外部端口 3578，内部端口 9000）
+docker run -d -p 3578:9000 --name worldcup-server -e TZ=Asia/Shanghai zaizaiyang/wc_data:latest
 ```
 
 或者使用 docker-compose：
@@ -62,6 +62,8 @@ docker run -d -p 8080:8080 --name worldcup-server -e TZ=Asia/Shanghai zaizaiyang
 ```bash
 docker-compose up -d
 ```
+
+访问 http://localhost:3578
 
 ## 配置 API Key
 

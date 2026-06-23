@@ -4,10 +4,10 @@
 services:
   worldcup:
     # 镜像名改成你的 Docker Hub 用户名
-    image: YOUR_DOCKERHUB_USERNAME/worldcup-app:latest
+    image: ZAIZAIYANG/worldcup-app:latest
     container_name: worldcup-server
     ports:
-      - "8080:8080"
+      - "3578:9000"
     restart: unless-stopped
     environment:
       - TZ=Asia/Shanghai

@@ -145,7 +145,7 @@ func findAvailablePort(startPort int, maxAttempts int) int {
 }
 
 func main() {
-	defaultPort := 3578
+	defaultPort := 9000
 	port := flag.Int("port", defaultPort, "HTTP server port")
 	flag.Parse()
 

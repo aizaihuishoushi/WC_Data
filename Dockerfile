@@ -39,6 +39,6 @@ WORKDIR /app
 COPY --from=go-builder /build/server .
 COPY --from=frontend-builder /app/dist ./dist
 
-EXPOSE 8080
+EXPOSE 9000
 
 CMD ["./server"]
