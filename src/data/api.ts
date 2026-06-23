@@ -83,7 +83,14 @@ export async function fetchLiveMatches(): Promise<Match[]> {
       return getMockMatches();
     }
 
-    const data = await response.json();
+    const text = await response.text();
+    let data: any;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      console.error('[数据] 响应不是有效的 JSON:', text.substring(0, 200));
+      return getMockMatches();
+    }
 
     // 如果是回退数据（包含 groups 字段），用它来生成正确的分组赛程
     if (data.fallback && data.groups && data.groups.length > 0) {

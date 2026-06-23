@@ -43,12 +43,29 @@ export function clearAppConfig(): void {
   localStorage.removeItem(STORAGE_KEY);
 }
 
+// 安全解析 JSON 响应
+async function safeJsonParse<T>(response: Response): Promise<T> {
+  const text = await response.text();
+  if (!text) {
+    throw new Error('服务器返回了空响应');
+  }
+  try {
+    return JSON.parse(text) as T;
+  } catch {
+    // 如果状态码不是200，直接报状态码错误
+    if (!response.ok) {
+      throw new Error(`请求失败 (HTTP ${response.status})`);
+    }
+    throw new Error('服务器返回了非 JSON 格式数据');
+  }
+}
+
 // 获取当前配置（从后端）
 export async function fetchCurrentConfig(): Promise<AppConfig> {
   try {
     const response = await fetch('/api/config');
-    if (!response.ok) throw new Error('获取配置失败');
-    const data = await response.json();
+    if (!response.ok) throw new Error(`获取配置失败 (HTTP ${response.status})`);
+    const data = await safeJsonParse<any>(response);
     return {
       apiKey: data.apiKey || '',
       proxy: {
@@ -72,7 +89,7 @@ export async function saveConfigToBackend(config: AppConfig): Promise<{ success:
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(config),
     });
-    const data = await response.json();
+    const data = await safeJsonParse<{ success: boolean; message: string }>(response);
     // 同时保存到 localStorage
     if (data.success) {
       saveAppConfig(config);
